@@ -1,0 +1,157 @@
+#!/usr/bin/env bash
+
+###############################################################################
+# RVM (Ruby Version Manager - rvm.io)                                         #
+###############################################################################
+
+# Install RVM if not found
+if [[ ! -s ~/.rvm/scripts/rvm ]]; then
+  curl -sSL https://get.rvm.io | bash -s stable --ruby
+fi
+
+###############################################################################
+# HomeBrew (brew.sh)                                                          #
+###############################################################################
+
+# Install Homebrew if not found
+if [[ -z $(command -v brew) ]]; then
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
+
+# Make sure we’re using the latest Homebrew
+brew update
+
+# Upgrade any already-installed formulae
+brew upgrade --all
+
+# Install GNU core utilities (those that come with OS X are outdated)
+# Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
+brew install coreutils
+# Install some other useful utilities like `sponge`.
+brew install moreutils
+# Install GNU `find`, `locate`, `updatedb`, and `xargs`, g-prefixed
+brew install findutils
+# Install GNU `sed`, overwriting the built-in `sed`.
+brew install gnu-sed --with-default-names
+# Install Bash 4.
+# Note: don’t forget to add `/usr/local/bin/bash` to `/etc/shells` before
+# running `chsh`.
+brew install bash
+brew tap homebrew/versions
+brew install bash-completion2
+
+# Switch to using brew-installed bash as default shell
+if ! fgrep -q '/usr/local/bin/bash' /etc/shells; then
+  echo '/usr/local/bin/bash' | sudo tee -a /etc/shells;
+  chsh -s /usr/local/bin/bash;
+fi;
+
+# Install wget with IRI support
+brew install wget --with-iri
+
+# Install more recent versions of some OS X tools
+brew install vim --override-system-vi
+brew install homebrew/dupes/grep
+brew install homebrew/dupes/openssh
+brew install homebrew/dupes/screen
+brew install homebrew/php/php55 --with-gmp
+
+# Install Mono
+brew install mono
+
+# Install other useful binaries
+brew install ack
+brew install blueutil
+brew install dark-mode
+brew install aspnet/dnx/dnvm
+brew install ffmpeg
+brew install git
+brew install mercurial
+brew install macvim
+brew install phantomjs
+brew install subversion
+brew install sqlite
+brew install tree
+
+# Install native apps
+brew install caskroom/cask/brew-cask
+brew tap caskroom/versions
+brew tap caskroom/fonts
+
+function installcask() {
+	brew cask install "${@}" 2> /dev/null
+}
+
+# browsers
+installcask chromium
+installcask firefox
+installcask google-chrome
+installcask google-chrome-canary
+installcask opera
+installcask torbrowser
+
+# devtools
+installcask atom
+installcask appcode
+installcask livereload
+installcask mono-mre
+installcask mysqlworkbench
+installcask sourcetree
+installcask webstorm
+installcask xamarin-studio
+
+# other
+installcask adobe-creative-cloud
+installcask airmail-beta
+installcask camtasia
+installcask copy
+installcask dropbox
+installcask filezilla
+installcask keka
+installcask parallels-desktop
+installcask skype
+installcask snagit
+installcask spotify
+
+# fonts
+installcask font-source-code-pro
+
+# Remove outdated versions from the cellar
+brew cask cleanup
+brew cleanup
+
+###############################################################################
+# Jasnus / macvim                                                             #
+###############################################################################
+
+# Install Janus for vim
+if [[ -z $(command -v mvim) ]]; then
+  curl -Lo- https://bit.ly/janus-bootstrap | bash
+fi
+
+###############################################################################
+# NVM (Node Version Manager - https://github.com/creationix/nvm)              #
+###############################################################################
+
+# Install NVM if not found
+if [[ ! -s ~/.nvm/nvm.sh ]]; then
+  git clone https://github.com/creationix/nvm.git ~/.nvm && cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`
+  . ~/.nvm/nvm.sh
+  nvm install stable
+fi
+
+npm install -g azure-cli
+npm install -g bower
+npm install -g coffee-script
+npm install -g grunt-cli
+npm install -g gulp
+npm install -g less
+npm install -g lineman
+npm install -g mocha
+npm install -g sass
+npm install -g sass-lint
+npm install -g yo
+
+# Yo Generators
+npm install -g generator-aspnet
+

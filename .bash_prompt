@@ -1,0 +1,187 @@
+#!/usr/bin/env bash
+
+# Based on:
+# @gf3’s Sexy Bash Prompt, inspired by “Extravagant Zsh Prompt”
+# Shamelessly copied from https://github.com/gf3/dotfiles
+# Screenshot: http://i.imgur.com/s0Blh.png
+
+if [[ $COLORTERM = gnome-* && $TERM = xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
+  export TERM=gnome-256color
+elif infocmp xterm-256color >/dev/null 2>&1; then
+  export TERM=xterm-256color
+fi
+
+if tput setaf 1 &> /dev/null; then
+  tput sgr0
+  RED=$(tput setaf 1)
+  GREEN=$(tput setaf 2)
+  YELLOW=$(tput setaf 3)
+  BLUE=$(tput setaf 4)
+  MAGENTA=$(tput setaf 5)
+  CYAN=$(tput setaf 6)
+  WHITE=$(tput setaf 7)
+  BOLD=$(tput bold)
+  RESET=$(tput sgr0)
+else
+  RED="\033[1;31m"
+  GREEN="\033[1;32m"
+  YELLOW="\033[1;33m"
+  BLUE="\033[1;34m"
+  MAGENTA="\033[1;35m"
+  CYAN="\033[1;36m"
+  WHITE="\033[1;37m"
+  BOLD=""
+  RESET="\033[m"
+fi
+
+export RED
+export GREEN
+export YELLOW
+export BLUE
+export MAGENTA
+export CYAN
+export WHITE
+export BOLD
+export RESET
+
+# check whether printf supports -v
+__git_printf_supports_v=
+printf -v __git_printf_supports_v -- '%s' yes >/dev/null 2>&1
+
+__scm_prompt() {
+  if [ "$TERM_PROGRAM" == "Apple_Terminal" ] && [ -z "$INSIDE_EMACS" ]; then
+    # Identify the directory using a "file:" scheme URL,
+    # including the host name to disambiguate local vs.
+    # remote connections. Percent-escape spaces.
+    local SEARCH=' '
+    local REPLACE='%20'
+    local PWD_URL="file://$HOSTNAME${PWD//$SEARCH/$REPLACE}"
+    printf '\e]7;%s\a' "$PWD_URL"
+  fi
+
+    local pcmode=no
+  local ps1pc_start='\u@\h:\w '
+  local ps1pc_end='\$ '
+  local printf_format=' \[$YELLOW\][\[$RESET\]%s\[$YELLOW\]]\[$RESET\]'
+
+  case "$#" in
+    2|3)  pcmode=yes
+      ps1pc_start="$1"
+      ps1pc_end="$2"
+      printf_format="${3:-$printf_format}"
+    ;;
+    0|1)  printf_format="${1:-$printf_format}"
+    ;;
+    *)  return
+    ;;
+  esac
+
+  local git_repo_info hg_repo_info
+  git_repo_info="$(git rev-parse --git-dir 2> /dev/null)"
+  hg_repo_info="$(hg root 2> /dev/null)"
+
+  if [ -n "$git_repo_info" ]; then
+    local index_added=0 index_modified=0 index_deleted=0
+    local working_added=0 working_modified=0 working_deleted=0
+    local branch_status
+    local git_status line x y
+
+    IFS=$'\n'
+    git_status="$(git status --branch --porcelain 2> /dev/null)"
+
+    for line in $git_status; do
+      x=${line:0:1}; y=${line:1:1};
+      if [[ $x = '?' ]]; then
+        let working_added++
+      elif [[ $x = '#' && $y = '#' ]]; then
+        branch_status=${line:3}
+      else
+        [[ $x = 'A' ]] && let index_added++
+        [[ $x = 'M' ]] && let index_modified++
+        [[ $x = 'D' ]] && let index_deleted++
+        [[ $y = 'M' ]] && let working_modified++
+        [[ $y = 'D' ]] && let working_deleted++
+      fi
+    done
+
+    local status_info="git:";
+    if [[ $branch_status =~ "[ahead" ]]; then
+      status_info+="\[$GREEN\]"
+    elif [[ $branch_status =~ "[behind" ]]; then
+      status_info+="\[$RED\]"
+    else
+      status_info+="\[$CYAN\]"
+    fi
+    status_info+=$(echo $branch_status | sed -e 's/\.\{3\}.*//');
+    status_info+="\[$RESET\]"
+
+    if [[ index_added -gt 0 || index_modified -gt 0 || index_deleted -gt 0 ]]; then
+      status_info+="\[$GREEN\]"
+      status_info+=" +$index_added"
+      status_info+=" ~$index_modified"
+      status_info+=" -$index_deleted"
+      status_info+="\[$RESET\]"
+    fi
+    if [[ working_added -gt 0 || working_modified -gt 0 || working_deleted -gt 0 ]]; then
+      status_info+="\[$RED\]"
+      status_info+=" +$working_added"
+      status_info+=" ~$working_modified"
+      status_info+=" -$working_deleted"
+      status_info+="\[$RESET\]"
+    fi
+
+    if [ $pcmode = yes ]; then
+      if [ "${__git_printf_supports_v-}" != yes ]; then
+        status_info=$(printf -- "$printf_format" "$status_info")
+      else
+        printf -v status_info -- "$printf_format" "$status_info"
+      fi
+      PS1="$ps1pc_start$status_info$ps1pc_end"
+    else
+      printf -- "$printf_format" "$status_info"
+    fi
+  elif [ -n "$hg_repo_info" ]; then
+    local working_untracked=0 working_added=0 working_modified=0 working_deleted=0 working_missing=0
+    local hg_status line x y
+
+    IFS=$'\n'
+    hg_status="$(hg status 2> /dev/null)"
+
+    for line in $hg_status; do
+      x=${line:0:1};
+      [[ $x = '?' ]] && let working_untracked++
+      [[ $x = 'A' ]] && let working_added++
+      [[ $x = 'M' ]] && let working_modified++
+      [[ $x = 'D' ]] && let working_deleted++
+      [[ $x = '!' ]] && let working_missing++
+    done
+
+    local status_info="hg:$(hg branch 2> /dev/null)"
+
+    if [[ working_untracked -gt 0 || working_added -gt 0 || working_modified -gt 0 || working_deleted -gt 0 || working_missing -gt 0 ]]; then
+      status_info+="\[$RED\]"
+      status_info+=" ?$working_untracked"
+      status_info+=" +$working_added"
+      status_info+=" ~$working_modified"
+      status_info+=" -$working_deleted"
+      status_info+=" !$working_missing"
+      status_info+="\[$RESET\]"
+    fi
+
+    if [ $pcmode = yes ]; then
+      if [ "${__git_printf_supports_v-}" != yes ]; then
+        status_info=$(printf -- "$printf_format" "$status_info")
+      else
+        printf -v status_info -- "$printf_format" "$status_info"
+      fi
+      PS1="$ps1pc_start$status_info$ps1pc_end"
+    else
+      printf -- "$printf_format" "$status_info"
+    fi
+  elif [ $pcmode = yes ]; then
+    #In PC mode PS1 always needs to be set
+    PS1="$ps1pc_start$ps1pc_end"
+  fi
+}
+
+PROMPT_COMMAND='__scm_prompt "\u@\h:\w" "\\\$ "'

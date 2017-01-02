@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+
+# CoreUtils
+if which brew &> /dev/null && [[ -d "/usr/local/opt/libexec/gnubin" ]]; then
+  export PATH="/usr/local/opt/libexec/gnubin:${PATH}"
+  export MANPATH="/usr/local/opt/libexec/gnuman:${MANPATH}"
+fi
+
+[[ -s /usr/local/opt/mono/bin ]] && export PATH=$PATH:/usr/local/opt/mono/bin
+[[ -s ~/.rvm/scripts/rvm ]] && export PATH=$HOME/.rvm/bin:$PATH
+
