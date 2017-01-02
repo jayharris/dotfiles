@@ -1,16 +1,7 @@
 #!/usr/bin/env bash
 
 ###############################################################################
-# RVM (Ruby Version Manager - rvm.io)                                         #
-###############################################################################
-
-# Install RVM if not found
-if [[ ! -s ~/.rvm/scripts/rvm ]]; then
-  curl -sSL https://get.rvm.io | bash -s stable --ruby
-fi
-
-###############################################################################
-# HomeBrew (brew.sh)                                                          #
+# HomeBrew
 ###############################################################################
 
 # Install Homebrew if not found
@@ -69,6 +60,7 @@ brew install git
 brew install mercurial
 brew install macvim
 brew install phantomjs
+brew install rbenv
 brew install subversion
 brew install sqlite
 brew install tree

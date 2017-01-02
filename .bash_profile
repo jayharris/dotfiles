@@ -43,11 +43,9 @@ if [[ -n $(command -v gulp) ]]; then
   eval "$(gulp --completion=bash)"
 fi
 
-# RVM
-if [[ -s ~/.rvm/scripts/rvm ]]; then
-  . ~/.rvm/scripts/rvm
-  # RVM bash completion
-  [[ -r ~/.rvm/scripts/completion ]] && . ~/.rvm/scripts/completion
+# RBEnv
+if [[ -n $(command -v rbenv) ]]; then
+  eval "$(rbenv init - --no-rehash)"
 fi
 
 # NVM

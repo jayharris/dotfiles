@@ -9,5 +9,4 @@ if which brew &> /dev/null && [[ -d "/usr/local/opt/libexec/gnubin" ]]; then
 fi
 
 [[ -s /usr/local/opt/mono/bin ]] && export PATH=$PATH:/usr/local/opt/mono/bin
-[[ -s ~/.rvm/scripts/rvm ]] && export PATH=$HOME/.rvm/bin:$PATH
 
