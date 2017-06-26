@@ -111,7 +111,7 @@ brew cleanup
 ###############################################################################
 
 # Install Janus for vim
-if [[ -z $(command -v mvim) ]]; then
+if [[ -n $(command -v vim) ]] && [[ ! -d ~/.vim/janus ]]; then
   curl -Lo- https://bit.ly/janus-bootstrap | bash
 fi
 
