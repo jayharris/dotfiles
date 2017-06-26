@@ -13,7 +13,7 @@ fi
 brew update
 
 # Upgrade any already-installed formulae
-brew upgrade --all
+brew upgrade
 
 # Install GNU core utilities (those that come with OS X are outdated)
 # Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
@@ -54,7 +54,6 @@ brew install mono
 brew install ack
 brew install blueutil
 brew install dark-mode
-brew install aspnet/dnx/dnvm
 brew install ffmpeg
 brew install git
 brew install mercurial
@@ -66,7 +65,7 @@ brew install sqlite
 brew install tree
 
 # Install native apps
-brew install caskroom/cask/brew-cask
+brew tap caskroom/cask
 brew tap caskroom/versions
 brew tap caskroom/fonts
 
@@ -84,25 +83,20 @@ installcask torbrowser
 
 # devtools
 installcask atom
-installcask appcode
 installcask livereload
 installcask mono-mre
 installcask mysqlworkbench
 installcask sourcetree
-installcask webstorm
 installcask xamarin-studio
 
 # other
 installcask adobe-creative-cloud
 installcask airmail-beta
-installcask camtasia
-installcask copy
 installcask dropbox
 installcask filezilla
 installcask keka
-installcask parallels-desktop
+installcask parallels-desktop11
 installcask skype
-installcask snagit
 installcask spotify
 
 # fonts
@@ -132,18 +126,18 @@ if [[ ! -s ~/.nvm/nvm.sh ]]; then
   nvm install stable
 fi
 
-npm install -g azure-cli
-npm install -g bower
-npm install -g coffee-script
-npm install -g grunt-cli
+#npm install -g azure-cli
+#npm install -g bower
+#npm install -g coffee-script
+#npm install -g grunt-cli
 npm install -g gulp
-npm install -g less
-npm install -g lineman
+#npm install -g less
+#npm install -g lineman
 npm install -g mocha
-npm install -g sass
-npm install -g sass-lint
-npm install -g yo
+#npm install -g sass
+#npm install -g sass-lint
+#npm install -g yo
 
 # Yo Generators
-npm install -g generator-aspnet
+#npm install -g generator-aspnet
 
