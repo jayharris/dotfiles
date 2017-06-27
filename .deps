@@ -58,6 +58,7 @@ brew install ffmpeg
 brew install git
 brew install mercurial
 brew install macvim
+brew install mas
 brew install phantomjs
 brew install rbenv
 brew install subversion
