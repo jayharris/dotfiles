@@ -114,6 +114,8 @@ alias mergepdf='/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Re
 alias spotoff="sudo mdutil -a -i off"
 # Enable Spotlight
 alias spoton="sudo mdutil -a -i on"
+# Rebuild Spotlight index
+alias spotrebuild="sudo mdutil -E /"
 
 # PlistBuddy alias, because sometimes `defaults` just doesn’t cut it
 alias plistbuddy="/usr/libexec/PlistBuddy"
