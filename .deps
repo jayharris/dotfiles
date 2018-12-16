@@ -73,6 +73,12 @@ function installcask() {
 	brew cask install "${@}" 2> /dev/null
 }
 
+# quicklook plugins
+installcask qlcolorcode    # syntax highlighting for code files
+installcask qlstephen      # display text files with unknown or no extension, like CHANGELOG
+installcask qlmarkdown     # display markdown
+installcask quicklook-json # display json files with highlighting
+
 # browsers
 installcask chromium
 installcask firefox
