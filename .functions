@@ -196,6 +196,17 @@ function getcertnames() {
 	fi
 }
 
+# `a` with no arguments opens the current directory in Atom, otherwise opens the
+# given location
+function a() {
+	if [ $# -eq 0 ]; then
+		atom .
+	else
+		atom "$@"
+	fi
+}
+
+# `o` with no arguments opens current directory, otherwise opens the given
 # `m` with no arguments opens the current directory in TextMate, otherwise
 # opens the given location
 function m() {
@@ -223,6 +234,16 @@ function v() {
 		vim .
 	else
 		vim "$@"
+	fi
+}
+
+# `vs` with no arguments opens the current directory in VSCode, otherwise opens the
+# given location
+function vs() {
+	if [ $# -eq 0 ]; then
+		open -a "/Applications/Visual Studio Code.app"/ .
+	else
+		open -a "/Applications/Visual Studio Code.app"/ "$@"
 	fi
 }
 
