@@ -37,14 +37,17 @@ if ! fgrep -q '/usr/local/bin/bash' /etc/shells; then
 fi;
 
 # Install wget with IRI support
-brew install wget --with-iri
+brew install wget
+
+# Unstakk GnuPG to enable PGP-signing commits
+brew install gnupg
 
 # Install more recent versions of some OS X tools
 brew install vim --with-override-system-vi
-brew install grep --with-default-names
+brew install grep
 brew install openssh
 brew install screen
-brew install homebrew/php/php55 --with-gmp
+brew install php
 
 # Install Mono
 brew install mono
@@ -52,9 +55,10 @@ brew install mono
 # Install other useful binaries
 brew install ack
 brew install blueutil
-brew install dark-mode
+brew install dos2unix
 brew install ffmpeg
 brew install git
+brew install imagemagick
 brew install mercurial
 brew install macvim
 brew install mas
@@ -65,9 +69,8 @@ brew install sqlite
 brew install tree
 
 # Install native apps
-brew tap caskroom/cask
-brew tap caskroom/versions
-brew tap caskroom/fonts
+brew tap homebrew/cask-fonts
+brew tap homebrew/cask-versions
 
 function installcask() {
 	brew cask install "${@}" 2> /dev/null
@@ -85,28 +88,29 @@ installcask firefox
 installcask google-chrome
 installcask google-chrome-canary
 installcask opera
-installcask torbrowser
+installcask tor-browser
 
 # devtools
 installcask atom
+installcask cyberduck
+installcask dotnet-sdk
 installcask livereload
-installcask mono-mre
 installcask mysqlworkbench
 installcask sourcetree
-installcask xamarin-studio
+installcask visual-studio
+installcask visual-studio-code
 
 # other
 installcask adobe-creative-cloud
-installcask airmail-beta
 installcask dropbox
-installcask filezilla
 installcask keka
-installcask parallels-desktop11
+installcask parallels
 installcask skype
 installcask spotify
 
 # fonts
 installcask font-source-code-pro
+installcask font-hack-nerd-font
 
 # Remove outdated versions from the cellar
 brew cask cleanup
@@ -134,16 +138,24 @@ fi
 
 #npm install -g azure-cli
 #npm install -g bower
-#npm install -g coffee-script
 #npm install -g grunt-cli
 npm install -g gulp
-#npm install -g less
-#npm install -g lineman
 npm install -g mocha
-#npm install -g sass
-#npm install -g sass-lint
-#npm install -g yo
+npm install -g yo
 
 # Yo Generators
 #npm install -g generator-aspnet
+
+###############################################################################
+# Composer / laravel valet / WordPress / Roots                                #
+###############################################################################
+
+brew install composer
+composer global require laravel/valet
+[[ -s $HOME/.composer/vendor/bin ]] && export PATH=$PATH:$HOME/.composer/vendor/bin
+valet install
+brew install mariadb
+brew services start mariadb
+brew install wp-cli
+php -d memory_limit=768M "$(which wp)" package install aaemnnosttv/wp-cli-valet-command
 
