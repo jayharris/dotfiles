@@ -12,16 +12,18 @@ for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
 done
 unset file
 
-# Case-insensitive globbing (used in pathname expansion)
-shopt -s nocaseglob
-# Append to the Bash history file, rather than overwriting it
-shopt -s histappend
-# Autocorrect typos in path names when using `cd`
-shopt -s cdspell
-# `**/qux` will enter `./foo/bar/baz/qux`
-shopt -s autocd
-# * Recursive globbing, e.g. `echo **/*.txt`
-shopt -s globstar
+if [[ -n $(command -v shopt) ]]; then
+  # Case-insensitive globbing (used in pathname expansion)
+  shopt -s nocaseglob
+  # Append to the Bash history file, rather than overwriting it
+  shopt -s histappend
+  # Autocorrect typos in path names when using `cd`
+  shopt -s cdspell
+  # `**/qux` will enter `./foo/bar/baz/qux`
+  shopt -s autocd
+  # * Recursive globbing, e.g. `echo **/*.txt`
+  shopt -s globstar
+fi;
 
 # Add tab completion for many Bash commands; requires `brew install homebrew/versions/bash-completion2`
 # Add tab completion for many Bash commands
@@ -52,6 +54,6 @@ if [[ -n $(command -v rbenv) ]]; then
 fi
 
 # NVM
-if [[ -s ~/.nvm/nvm.sh ]]; then
-  . ~/.nvm/nvm.sh
-fi
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+

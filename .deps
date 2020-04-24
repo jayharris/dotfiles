@@ -23,50 +23,46 @@ brew install moreutils
 # Install GNU `find`, `locate`, `updatedb`, and `xargs`, g-prefixed
 brew install findutils
 # Install GNU `sed`, overwriting the built-in `sed`.
-brew install gnu-sed --with-default-names
+brew install gnu-sed
 # Install Bash 4.
-# Note: don’t forget to add `/usr/local/bin/bash` to `/etc/shells` before
-# running `chsh`.
 brew install bash
-brew install bash-completion2
-
-# Switch to using brew-installed bash as default shell
+# Adding `/usr/local/bin/bash` to `/etc/shells`
 if ! fgrep -q '/usr/local/bin/bash' /etc/shells; then
   echo '/usr/local/bin/bash' | sudo tee -a /etc/shells;
-  chsh -s /usr/local/bin/bash;
 fi;
+chsh -s /usr/local/bin/bash;
 
-# Install wget with IRI support
+brew install bash-completion2
+
 brew install wget
-
-# Unstakk GnuPG to enable PGP-signing commits
 brew install gnupg
-
-# Install more recent versions of some OS X tools
-brew install vim --with-override-system-vi
 brew install grep
 brew install openssh
 brew install screen
+
 brew install php
-
-# Install Mono
 brew install mono
+brew install nvm
+brew install ruby
+brew install rbenv
 
-# Install other useful binaries
 brew install ack
 brew install blueutil
+brew install certbot
+brew install composer
 brew install dos2unix
+brew install dnsmasq
 brew install ffmpeg
 brew install git
 brew install imagemagick
-brew install mercurial
 brew install macvim
 brew install mas
-brew install phantomjs
-brew install rbenv
-brew install subversion
-brew install sqlite
+brew install nginx
 brew install tree
+brew install mariadb
+brew install wp-cli
+
+brew services start mariadb
 
 # Install native apps
 brew tap homebrew/cask-fonts
@@ -74,6 +70,9 @@ brew tap homebrew/cask-versions
 
 function installcask() {
 	brew cask install "${@}" 2> /dev/null
+}
+function installmas() {
+	mas install "${@}" 2> /dev/null
 }
 
 # quicklook plugins
@@ -95,6 +94,8 @@ installcask atom
 installcask cyberduck
 installcask dotnet-sdk
 installcask livereload
+installmas  1289197285     # MindNode
+installmas  1295203466     # Microsoft Remote Desktop
 installcask mysqlworkbench
 installcask sourcetree
 installcask visual-studio
@@ -103,21 +104,33 @@ installcask visual-studio-code
 # other
 installcask adobe-creative-cloud
 installcask dropbox
+installmas  406056744      # Evernote
 installcask keka
+installmas  40918369       # Keynote
+installmas  926036361      # LastPass
+installmas  409203825      # Numbers
+installmas  409201541      # Pages
 installcask parallels
 installcask skype
+installmas  803453959      # Slack
+installmas  1176895641     # Spark Email
 installcask spotify
+installmas  1278508951     # Trello
+installmas  485812721      # TweetDeck
 
 # fonts
 installcask font-source-code-pro
 installcask font-hack-nerd-font
 
+# REMOVE bundled apps
+mas uninstall 408981434    # iMovie
+mas uninstall 682658836    # GarageBand
+
 # Remove outdated versions from the cellar
-brew cask cleanup
 brew cleanup
 
 ###############################################################################
-# Jasnus / macvim                                                             #
+# Jasnus (for vim)                                                            #
 ###############################################################################
 
 # Install Janus for vim
@@ -129,33 +142,20 @@ fi
 # NVM (Node Version Manager - https://github.com/creationix/nvm)              #
 ###############################################################################
 
-# Install NVM if not found
-if [[ ! -s ~/.nvm/nvm.sh ]]; then
-  git clone https://github.com/creationix/nvm.git ~/.nvm && cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`
-  . ~/.nvm/nvm.sh
-  nvm install stable
-fi
+# Install latest version of nodejs
+nvm install stable
 
 #npm install -g azure-cli
-#npm install -g bower
-#npm install -g grunt-cli
 npm install -g gulp
 npm install -g mocha
 npm install -g yo
 
-# Yo Generators
-#npm install -g generator-aspnet
-
 ###############################################################################
-# Composer / laravel valet / WordPress / Roots                                #
+# Composer & Valet                                                            #
 ###############################################################################
 
-brew install composer
 composer global require laravel/valet
 [[ -s $HOME/.composer/vendor/bin ]] && export PATH=$PATH:$HOME/.composer/vendor/bin
 valet install
-brew install mariadb
-brew services start mariadb
-brew install wp-cli
 php -d memory_limit=768M "$(which wp)" package install aaemnnosttv/wp-cli-valet-command
 
