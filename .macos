@@ -180,7 +180,7 @@ sudo defaults write /Library/Preferences/com.apple.driver.AppleIRController Devi
 sudo systemsetup -setremotelogin off
 
 # Disable wake-on modem
-sudo systemsetup -setwakeonmodem off
+#sudo systemsetup -setwakeonmodem off
 
 # Disable wake-on LAN
 sudo systemsetup -setwakeonnetworkaccess off
@@ -212,7 +212,7 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow GuestEnabled -boo
 defaults write com.apple.CrashReporter DialogType -string "none"
 
 # Disable diagnostic reports
-sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.SubmitDiagInfo.plist
+#sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.SubmitDiagInfo.plist
 
 # Log authentication events for 90 days
 #sudo perl -p -i -e 's/rotate=seq file_max=5M all_max=20M/rotate=utc file_max=5M ttl=90/g' "/etc/asl/com.apple.authd"
@@ -236,14 +236,14 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 ###############################################################################
 
 # Disable hibernation (speeds up entering sleep mode)
-sudo pmset -a hibernatemode 0
+#sudo pmset -a hibernatemode 0
 
 # Remove the sleep image file to save disk space
-sudo rm /private/var/vm/sleepimage
+#sudo rm /private/var/vm/sleepimage
 # Create a zero-byte file instead…
-sudo touch /private/var/vm/sleepimage
+#sudo touch /private/var/vm/sleepimage
 # …and make sure it can’t be rewritten
-sudo chflags uchg /private/var/vm/sleepimage
+#sudo chflags uchg /private/var/vm/sleepimage
 
 # Disable the sudden motion sensor as it’s not useful for SSDs
 sudo pmset -a sms 0
@@ -295,7 +295,7 @@ defaults write NSGlobalDomain AppleMeasurementUnits -string "Inches"
 defaults write NSGlobalDomain AppleMetricUnits -bool false
 
 # Set the timezone; see `sudo systemsetup -listtimezones` for other values
-sudo systemsetup -settimezone "America/Detroit" > /dev/null
+sudo systemsetup -settimezone "America/Los_Angeles" > /dev/null
 
 # Stop iTunes from responding to the keyboard media keys
 launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/null
@@ -436,7 +436,7 @@ defaults write com.apple.NetworkBrowser BrowseAllInterfaces -bool true
 sudo nvram boot-args="mbasd=1"
 
 # Show the ~/Library folder
-chflags nohidden ~/Library
+chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
 
 # Show the /Volumes folder
 sudo chflags nohidden /Volumes
