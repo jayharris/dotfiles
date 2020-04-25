@@ -4,3 +4,5 @@ let NERDTreeShowHidden=1
 
 let g:syntastic_sass_checkers=["sass_lint"]
 let g:syntastic_scss_checkers=["sass_lint"]
+
+autocmd BufNewFile,BufRead *.props,*.targets set filetype=xml
