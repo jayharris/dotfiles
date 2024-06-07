@@ -196,35 +196,14 @@ function getcertnames() {
 	fi
 }
 
-# `a` with no arguments opens the current directory in Atom, otherwise opens the
+# `rider` with no arguments opens the current directory in Rider, otherwise opens the
 # given location
-function a() {
+function rider() {
 	if [ $# -eq 0 ]; then
-		atom .
+		open -a "/Applications/Rider.app" --args . nosplash
 	else
-		atom "$@"
-	fi
-}
-
-# `o` with no arguments opens current directory, otherwise opens the given
-# `m` with no arguments opens the current directory in TextMate, otherwise
-# opens the given location
-function m() {
-	if [ $# -eq 0 ]; then
-		mate .
-	else
-		mate "$@"
-	fi
-}
-
-# `s` with no arguments opens the current directory in Sublime Text, otherwise
-# opens the given location
-function s() {
-	if [ $# -eq 0 ]; then
-		subl .
-	else
-		subl "$@"
-	fi
+		open -a "/Applications/Rider.app" --args "$@" nosplash
+  fi
 }
 
 # `v` with no arguments opens the current directory in Vim, otherwise opens the
@@ -241,9 +220,9 @@ function v() {
 # given location
 function vs() {
 	if [ $# -eq 0 ]; then
-		open -a "/Applications/Visual Studio Code.app"/ .
+		open -a "/Applications/Visual Studio Code.app" .
 	else
-		open -a "/Applications/Visual Studio Code.app"/ "$@"
+		open -a "/Applications/Visual Studio Code.app" "$@"
 	fi
 }
 
@@ -251,9 +230,9 @@ function vs() {
 # given location
 function ws() {
 	if [ $# -eq 0 ]; then
-		open -a "/Applications/WebStorm.app/" .
+		open -a "/Applications/WebStorm.app" .
 	else
-		open -a "/Applications/WebStorm.app/" "$@"
+		open -a "/Applications/WebStorm.app" "$@"
 	fi
 }
 
