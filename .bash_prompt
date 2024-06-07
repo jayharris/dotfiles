@@ -76,9 +76,8 @@ __scm_prompt() {
     ;;
   esac
 
-  local git_repo_info hg_repo_info
+  local git_repo_info
   git_repo_info="$(git rev-parse --git-dir 2> /dev/null)"
-  hg_repo_info="$(hg root 2> /dev/null)"
 
   if [ -n "$git_repo_info" ]; then
     local index_added=0 index_modified=0 index_deleted=0
@@ -127,44 +126,6 @@ __scm_prompt() {
       status_info+=" +$working_added"
       status_info+=" ~$working_modified"
       status_info+=" -$working_deleted"
-      status_info+="\[$RESET\]"
-    fi
-
-    if [ $pcmode = yes ]; then
-      if [ "${__git_printf_supports_v-}" != yes ]; then
-        status_info=$(printf -- "$printf_format" "$status_info")
-      else
-        printf -v status_info -- "$printf_format" "$status_info"
-      fi
-      PS1="$ps1pc_start$status_info$ps1pc_end"
-    else
-      printf -- "$printf_format" "$status_info"
-    fi
-  elif [ -n "$hg_repo_info" ]; then
-    local working_untracked=0 working_added=0 working_modified=0 working_deleted=0 working_missing=0
-    local hg_status line x y
-
-    IFS=$'\n'
-    hg_status="$(hg status 2> /dev/null)"
-
-    for line in $hg_status; do
-      x=${line:0:1};
-      [[ $x = '?' ]] && let working_untracked++
-      [[ $x = 'A' ]] && let working_added++
-      [[ $x = 'M' ]] && let working_modified++
-      [[ $x = 'D' ]] && let working_deleted++
-      [[ $x = '!' ]] && let working_missing++
-    done
-
-    local status_info="hg:$(hg branch 2> /dev/null)"
-
-    if [[ working_untracked -gt 0 || working_added -gt 0 || working_modified -gt 0 || working_deleted -gt 0 || working_missing -gt 0 ]]; then
-      status_info+="\[$RED\]"
-      status_info+=" ?$working_untracked"
-      status_info+=" +$working_added"
-      status_info+=" ~$working_modified"
-      status_info+=" -$working_deleted"
-      status_info+=" !$working_missing"
       status_info+="\[$RESET\]"
     fi
 
