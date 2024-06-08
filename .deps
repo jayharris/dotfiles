@@ -9,6 +9,12 @@ if [[ -z $(command -v brew) ]]; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
 
+if [[ -f /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -f /usr/local/bin/brew ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+
 # Make sure we’re using the latest Homebrew
 brew update
 
@@ -27,10 +33,12 @@ brew install gnu-sed
 # Install Bash 4.
 brew install bash
 # Adding `/usr/local/bin/bash` to `/etc/shells`
-if ! fgrep -q '/usr/local/bin/bash' /etc/shells; then
-  echo '/usr/local/bin/bash' | sudo tee -a /etc/shells;
+if ! fgrep -q '$HOMEBREW_PREFIX/bin/bash' /etc/shells; then
+  echo '$HOMEBREW_PREFIX/bin/bash' | sudo tee -a /etc/shells;
 fi;
-chsh -s /usr/local/bin/bash;
+if [[ -f $HOMEBREW_PREFIX/bin/bash ]]; then
+  chsh -s $HOMEBREW_PREFIX/bin/bash;
+fi
 
 brew install bash-completion2
 
@@ -64,61 +72,50 @@ brew install wp-cli
 
 brew services start mariadb
 
-# Install native apps
-brew tap homebrew/cask-fonts
-brew tap homebrew/cask-versions
-
-function installcask() {
-	brew cask install "${@}" 2> /dev/null
-}
-function installmas() {
-	mas install "${@}" 2> /dev/null
-}
-
 # quicklook plugins
-installcask qlcolorcode    # syntax highlighting for code files
-installcask qlstephen      # display text files with unknown or no extension, like CHANGELOG
-installcask qlmarkdown     # display markdown
-installcask quicklook-json # display json files with highlighting
+brew install --cask qlcolorcode    # syntax highlighting for code files
+brew install --cask qlstephen      # display text files with unknown or no extension, like CHANGELOG
+brew install --cask qlmarkdown     # display markdown
+brew install --cask quicklook-json # display json files with highlighting
 
 # browsers
-installcask firefox
-installcask google-chrome
-installcask tor-browser
+brew install --cask firefox
+brew install --cask google-chrome
+brew install --cask tor-browser
 
 # devtools
-installcask cyberduck
-installcask datagrip
-installcask dotnet-sdk
-installmas  1289197285     # MindNode
-installmas  1295203466     # Microsoft Remote Desktop
-installcask microsoft-azure-storage-explorer
-installcask mysqlworkbench
-installcask rider
-installcask sourcetree
-installcask visual-studio-code
+brew install --cask cyberduck
+brew install --cask datagrip
+brew install --cask dotnet-sdk
+mas install         1289197285     # MindNode
+mas install         1295203466     # Microsoft Remote Desktop
+brew install --cask microsoft-azure-storage-explorer
+brew install --cask mysqlworkbench
+brew install --cask rider
+brew install --cask sourcetree
+brew install --cask visual-studio-code
 
 # other
-installcask adobe-creative-cloud
-installmas  1254981365     # Contrast
-installcask dropbox
-installmas  406056744      # Evernote
-installcask figma
-installcask gpg-suite
-installcask grammarly-desktop
-installmas  409183694      # Keynote
-installmas  926036361      # LastPass
-installmas  409203825      # Numbers
-installmas  409201541      # Pages
-installcask parallels
-installmas  803453959      # Slack
-#installmas  1176895641     # Spark Email
-installcask spotify
-installmas  1278508951     # Trello
+brew install --cask adobe-creative-cloud
+mas install         1254981365     # Contrast
+brew install --cask dropbox
+mas install         406056744      # Evernote
+brew install --cask figma
+brew install --cask gpg-suite
+brew install --cask grammarly-desktop
+mas install         409183694      # Keynote
+mas install         926036361      # LastPass
+mas install         409203825      # Numbers
+mas install         409201541      # Pages
+brew install --cask parallels
+mas install         803453959      # Slack
+#mas install         1176895641     # Spark Email
+brew install --cask spotify
+mas install         1278508951     # Trello
 
 # fonts
-installcask font-source-code-pro
-installcask font-hack-nerd-font
+brew install --cask font-source-code-pro
+brew install --cask font-hack-nerd-font
 
 # REMOVE bundled apps
 mas uninstall 408981434    # iMovie
@@ -141,14 +138,18 @@ fi
 ###############################################################################
 
 # Install latest version of nodejs
-nvm install stable
+if [[ -n $(command -v nvm) ]]; then
+  nvm install stable
+fi
 
 ###############################################################################
 # Composer & Valet                                                            #
 ###############################################################################
 
-composer global require laravel/valet
-[[ -s $HOME/.composer/vendor/bin ]] && export PATH=$PATH:$HOME/.composer/vendor/bin
-valet install
-php -d memory_limit=768M "$(which wp)" package install aaemnnosttv/wp-cli-valet-command
+if [[ -n $(command -v composer) ]]; then
+  composer global require laravel/valet
+  [[ -s $HOME/.composer/vendor/bin ]] && export PATH=${PATH+PATH:}$HOME/.composer/vendor/bin
+  valet install
+  php -d memory_limit=768M "$(which wp)" package install aaemnnosttv/wp-cli-valet-command:@stable
+fi
 
