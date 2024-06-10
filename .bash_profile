@@ -27,7 +27,9 @@ fi;
 
 # Add tab completion for many Bash commands; requires `brew install homebrew/versions/bash-completion2`
 # Add tab completion for many Bash commands
-if which brew &> /dev/null && [ -f "$(brew --prefix)/share/bash-completion/bash_completion" ]; then
+if [[ -n $(command -v brew) ]] && [[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]]; then
+  source "$(brew --prefix)/etc/profile.d/bash_completion.sh";
+elif [[ -n $(command -v brew) ]] && [ -f "$(brew --prefix)/share/bash-completion/bash_completion" ]; then
   source "$(brew --prefix)/share/bash-completion/bash_completion";
 elif [ -f /etc/bash_completion ]; then
 	source /etc/bash_completion;

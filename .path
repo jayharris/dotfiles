@@ -6,12 +6,12 @@ export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 [[ -n $(command -v brew) ]] && eval "$(brew shellenv)"
 
 # CoreUtils
-if [[ -n $(command -v brew) ]] && [[ -d "${HOMEBREW_PREFIX}/opt/libexec/gnubin" ]]; then
-  export PATH="${HOMEBREW_PREFIX}/opt/libexec/gnubin${PATH+:$PATH}"
-  export MANPATH="${HOMEBREW_PREFIX}/opt/libexec/gnuman${MANPATH+:$MANPATH}"
+if [[ -n $(command -v brew) ]] && [[ -d "$(brew --prefix coreutils)/opt/libexec/gnubin" ]]; then
+  export PATH="$(brew --prefix coreutils)/opt/libexec/gnubin${PATH+:$PATH}"
+  export MANPATH="$(brew --prefix coreutils)/opt/libexec/gnuman${MANPATH+:$MANPATH}"
 fi
 
-[[ -n $(command -v brew) ]] && [[ -s $HOMEBREW_PREFIX/opt/mono/bin ]] && export PATH=${PATH+$PATH:}$HOMEBREW_PREFIX/opt/mono/bin
+[[ -n $(command -v brew) ]] && [[ -s $(brew --prefix mono)/bin ]] && export PATH=${PATH+$PATH:}$(brew --prefix mono)/bin
 [[ -s $HOME/.composer/vendor/bin ]] && export PATH=${PATH+$PATH:}$HOME/.composer/vendor/bin
 
 
