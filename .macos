@@ -33,26 +33,33 @@ sudo nvram StartupMute="%01"
 
 # Menu bar: configure icons
 for domain in ~/Library/Preferences/ByHost/com.apple.controlcenter.*; do
-    /usr/libexec/PlistBuddy -c "Set AirDrop 2" $domain
-    /usr/libexec/PlistBuddy -c "Set Battery 8" $domain
-    /usr/libexec/PlistBuddy -c "Set BatteryShowPercentage true" $domain
-    /usr/libexec/PlistBuddy -c "Set Bluetooth 2" $domain
-    /usr/libexec/PlistBuddy -c "Set Display 2" $domain
-    /usr/libexec/PlistBuddy -c "Set FocusModes 2" $domain
-    /usr/libexec/PlistBuddy -c "Set MusicRecognition 2" $domain
-    /usr/libexec/PlistBuddy -c "Set NowPlaying 2" $domain
-    /usr/libexec/PlistBuddy -c "Set ScreenMirroring 2" $domain
-    /usr/libexec/PlistBuddy -c "Set Sound 2" $domain
-    /usr/libexec/PlistBuddy -c "Set StageManager 2" $domain
-    /usr/libexec/PlistBuddy -c "Set UserSwitcher 2" $domain
-    /usr/libexec/PlistBuddy -c "Set WiFi 2" $domain
+    /usr/libexec/PlistBuddy -c "Add :AirDrop string" $domain
+    /usr/libexec/PlistBuddy -c "Set :AirDrop 2" $domain
+    /usr/libexec/PlistBuddy -c "Add :Battery string" $domain
+    /usr/libexec/PlistBuddy -c "Set :Battery 8" $domain
+    /usr/libexec/PlistBuddy -c "Add :BatteryShowPercentage string" $domain
+    /usr/libexec/PlistBuddy -c "Set :BatteryShowPercentage true" $domain
+    /usr/libexec/PlistBuddy -c "Add :Bluetooth string" $domain
+    /usr/libexec/PlistBuddy -c "Set :Bluetooth 2" $domain
+    /usr/libexec/PlistBuddy -c "Add :Display string" $domain
+    /usr/libexec/PlistBuddy -c "Set :Display 2" $domain
+    /usr/libexec/PlistBuddy -c "Add :FocusModes string" $domain
+    /usr/libexec/PlistBuddy -c "Set :FocusModes 2" $domain
+    /usr/libexec/PlistBuddy -c "Add :MusicRecognition string" $domain
+    /usr/libexec/PlistBuddy -c "Set :MusicRecognition 2" $domain
+    /usr/libexec/PlistBuddy -c "Add :NowPlaying string" $domain
+    /usr/libexec/PlistBuddy -c "Set :NowPlaying 2" $domain
+    /usr/libexec/PlistBuddy -c "Add :ScreenMirroring string" $domain
+    /usr/libexec/PlistBuddy -c "Set :ScreenMirroring 2" $domain
+    /usr/libexec/PlistBuddy -c "Add :Sound string" $domain
+    /usr/libexec/PlistBuddy -c "Set :Sound 2" $domain
+    /usr/libexec/PlistBuddy -c "Add :StageManager string" $domain
+    /usr/libexec/PlistBuddy -c "Set :StageManager 2" $domain
+    /usr/libexec/PlistBuddy -c "Add :UserSwitcher string" $domain
+    /usr/libexec/PlistBuddy -c "Set :UserSwitcher 2" $domain
+    /usr/libexec/PlistBuddy -c "Add :WiFi string" $domain
+    /usr/libexec/PlistBuddy -c "Set :WiFi 2" $domain
 done
-#x#defaults write com.apple.systemuiserver menuExtras -array \
-#x#	"/Applications/Utilities/Keychain Access.app/Contents/Resources/Keychain.menu" \
-#x#	"/System/Library/CoreServices/Menu Extras/Bluetooth.menu" \
-#x#	"/System/Library/CoreServices/Menu Extras/AirPort.menu" \
-#x#	"/System/Library/CoreServices/Menu Extras/Battery.menu" \
-#x#	"/System/Library/CoreServices/Menu Extras/Clock.menu"
 
 # Set Dark mode
 defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
@@ -652,7 +659,8 @@ defaults write com.apple.dock wvous-br-modifier -int 0
 
 # Hide Spotlight tray-icon (and subsequent helper)
 for domain in ~/Library/Preferences/ByHost/com.apple.Spotlight.*; do
-    /usr/libexec/PlistBuddy -c "Set MenuItemHidden true" $domain
+    /usr/libexec/PlistBuddy -c "Add :MenuItemHidden string" $domain
+    /usr/libexec/PlistBuddy -c "Set :MenuItemHidden true" $domain
 done
 
 # Disable Spotlight indexing for any volume that gets mounted and has not yet
@@ -703,10 +711,12 @@ sudo mdutil -E / > /dev/null
 
 # Show Siri icon in the Menubar
 for domain in ~/Library/Preferences/ByHost/com.apple.controlcenter.*; do
-    /usr/libexec/PlistBuddy -c "Set Siri 2" $domain
+    /usr/libexec/PlistBuddy -c "Add :Siri string" $domain
+    /usr/libexec/PlistBuddy -c "Set :Siri 2" $domain
 done
 for domain in ~/Library/Preferences/ByHost/com.apple.Siri.*; do
-    /usr/libexec/PlistBuddy -c "Set StatusMenuVisible 0" $domain
+    /usr/libexec/PlistBuddy -c "Add :StatusMenuVisible string" $domain
+    /usr/libexec/PlistBuddy -c "Set :StatusMenuVisible 0" $domain
 done
 
 ###############################################################################
