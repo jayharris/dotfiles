@@ -131,12 +131,12 @@ brew cleanup
 # Install Janus for vim
 if [[ -n $(command -v vim) ]] && [[ ! -d ~/.vim/janus ]]; then
   curl -Lo- https://bit.ly/janus-bootstrap | bash
+  (cd .vim && git submodule update --remote && rake)
 fi
 
 ###############################################################################
 # NVM (Node Version Manager - https://github.com/creationix/nvm)              #
 ###############################################################################
-
 # Install latest version of nodejs
 if [[ -n $(command -v nvm) ]]; then
   nvm install stable
