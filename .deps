@@ -148,7 +148,7 @@ fi
 
 if [[ -n $(command -v composer) ]]; then
   composer global require laravel/valet
-  [[ -s $HOME/.composer/vendor/bin ]] && export PATH=${PATH+PATH:}$HOME/.composer/vendor/bin
+  [[ -s $HOME/.composer/vendor/bin ]] && export PATH=${PATH+$PATH:}$HOME/.composer/vendor/bin
   valet install
   php -d memory_limit=768M "$(which wp)" package install aaemnnosttv/wp-cli-valet-command:@stable
 fi
