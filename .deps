@@ -131,13 +131,14 @@ brew cleanup
 # Install Janus for vim
 if [[ -n $(command -v vim) ]] && [[ ! -d ~/.vim/janus ]]; then
   curl -Lo- https://bit.ly/janus-bootstrap | bash
-  (cd .vim && git submodule update --remote && rake)
 fi
 
 ###############################################################################
 # NVM (Node Version Manager - https://github.com/creationix/nvm)              #
 ###############################################################################
+
 # Install latest version of nodejs
+[ -s "$(brew --prefix nvm)/nvm.sh" ] && \. "$(brew --prefix nvm)/nvm.sh"
 if [[ -n $(command -v nvm) ]]; then
   nvm install stable
 fi
@@ -148,7 +149,7 @@ fi
 
 if [[ -n $(command -v composer) ]]; then
   composer global require laravel/valet
-  [[ -s $HOME/.composer/vendor/bin ]] && export PATH=${PATH+$PATH:}$HOME/.composer/vendor/bin
+  [[ -s $HOME/.composer/vendor/bin ]] && export PATH=${PATH+PATH:}$HOME/.composer/vendor/bin
   valet install
   php -d memory_limit=768M "$(which wp)" package install aaemnnosttv/wp-cli-valet-command:@stable
 fi
